@@ -31,12 +31,47 @@ document.addEventListener("keydown", function (e) {
 
 //comment everything after this and uncomment concepts to get a know how of concepts and how everything interactacts with each other
 
+const btnScrollTo = document.querySelector(".btn--scroll-to");
+const section1 = document.querySelector("#section--1");
 
+btnScrollTo.addEventListener("click", (e) => {
+  const s1coords = section1.getBoundingClientRect();
 
+  console.log(e.target.getBoundingClientRect());
+  console.log(s1coords);
 
+  // How much we scrolled this is how we get it
+  // Old way of doing it
+  // console.log("Current scroll for X/Y", window.pageXOffset, window.pageYOffset);
+  console.log("Current scroll for X/Y", window.scrollX, window.scrollY);
 
+  // To get height and width of the viewport, this ignores scrollbar
+  console.log(
+    "Heigt/Width of the viewport",
+    document.documentElement.clientHeight,
+    document.documentElement.clientWidth
+  );
 
+  // Scrolling Implementation that supports legacy browsers but is not smooth
+  // Bad way of implementing this, since the scrolled distance is not taken into account
+  // window.scrollTo(s1coords.left, s1coords.top);
 
+  // Correct way to do this without smooothness
+  // window.scrollTo(
+  //   s1coords.left + window.scrollX,
+  //   s1coords.top + window.scrollY
+  // );
+
+  // Smooth Scrollinng implementation
+  // window.scrollTo({
+  //   left: s1coords.left + window.scrollX,
+  //   top: s1coords.top + window.scrollY,
+  //   behavior: "smooth",
+  // });
+
+  // Smooth scrolling for relatively newer browsers
+  section1.scrollIntoView({ behavior: "smooth" });
+});
 
 // /////////////////////
 // //Concepts
