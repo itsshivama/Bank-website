@@ -7,6 +7,8 @@ const modal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
 const btnCloseModal = document.querySelector(".btn--close-modal");
 const btnsOpenModal = document.querySelectorAll(".btn--show-modal");
+const btnScrollTo = document.querySelector(".btn--scroll-to");
+const section1 = document.querySelector("#section--1");
 
 const openModal = function () {
   modal.classList.remove("hidden");
@@ -31,9 +33,7 @@ document.addEventListener("keydown", function (e) {
 
 //comment everything after this and uncomment concepts to get a know how of concepts and how everything interactacts with each other
 
-const btnScrollTo = document.querySelector(".btn--scroll-to");
-const section1 = document.querySelector("#section--1");
-
+// Button Scrolling
 btnScrollTo.addEventListener("click", (e) => {
   const s1coords = section1.getBoundingClientRect();
 
@@ -73,37 +73,29 @@ btnScrollTo.addEventListener("click", (e) => {
   section1.scrollIntoView({ behavior: "smooth" });
 });
 
-// Even Capturing and bubbling
-// Example of arrow implicit and explicit return.
-const randomInt = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1) + min);
-const randomColor = () => {
-  return `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
-};
-// console.log(randomColor());
-// 'this' doesnt work with arrow function hence using a regular function call
-document.querySelector(".nav__link").addEventListener("click", function (e) {
-  this.style.backgroundColor = randomColor();
-  console.log("LINK", e.target, e.currentTarget);
+// Page Navigation
 
-  // To stop propogation
-  // e.stopPropagation();
-});
+// Without event delegation the dirty way of doing it
+// document.querySelectorAll(".nav__link").forEach((el) => {
+//   el.addEventListener("click", function (e) {
+//     e.preventDefault();
+//     const id = this.getAttribute("href"); //this.href will return an absolute link we want whatts is ther in the html and thats why this.
+//      console.log(id);
+//     document.querySelector(id).scrollIntoView({ behavior: "smooth" });
+//   });
+// });
+
+// I the above exaple we attached an event to every element which is not a good solution, so now we use event delegation for a better approach
 
 document.querySelector(".nav__links").addEventListener("click", function (e) {
-  this.style.backgroundColor = randomColor();
-  console.log("CONTAINER", e.target, e.currentTarget);
+  e.preventDefault();
+  if (e.target.classList.contains("nav__link")) {
+    const id = e.target.getAttribute("href");
+    console.log(id);
+    document.querySelector(id).scrollIntoView({ behavior: "smooth" });
+  }
 });
 
-// document.querySelector(".nav").addEventListener("click", function (e) {
-//   this.style.backgroundColor = randomColor();
-//   console.log("NAV", e.target, e.currentTarget);
-// }, true);
-
-document.querySelector(".nav").addEventListener("click", function (e) {
-  this.style.backgroundColor = randomColor();
-  console.log("NAV", e.target, e.currentTarget);
-});
 // /////////////////////
 // //Concepts
 // /////////////////////
@@ -216,3 +208,35 @@ document.querySelector(".nav").addEventListener("click", function (e) {
 // //Dont use
 // //This will overwrite all the classes in that element and rewrite it to just the ones defined here
 // logo.className = "Jonas";
+
+// // Even Capturing and bubbling
+// // Example of arrow implicit and explicit return.
+// const randomInt = (min, max) =>
+//   Math.floor(Math.random() * (max - min + 1) + min);
+// const randomColor = () => {
+//   return `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
+// };
+// // console.log(randomColor());
+// // 'this' doesnt work with arrow function hence using a regular function call
+// document.querySelector(".nav__link").addEventListener("click", function (e) {
+//   this.style.backgroundColor = randomColor();
+//   console.log("LINK", e.target, e.currentTarget);
+
+//   // To stop propogation
+//   // e.stopPropagation();
+// });
+
+// document.querySelector(".nav__links").addEventListener("click", function (e) {
+//   this.style.backgroundColor = randomColor();
+//   console.log("CONTAINER", e.target, e.currentTarget);
+// });
+
+// // document.querySelector(".nav").addEventListener("click", function (e) {
+// //   this.style.backgroundColor = randomColor();
+// //   console.log("NAV", e.target, e.currentTarget);
+// // }, true);
+
+// document.querySelector(".nav").addEventListener("click", function (e) {
+//   this.style.backgroundColor = randomColor();
+//   console.log("NAV", e.target, e.currentTarget);
+// });
