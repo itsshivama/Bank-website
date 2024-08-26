@@ -24,6 +24,11 @@ const closeModal = function () {
   overlay.classList.add("hidden");
 };
 
+// To prevent Browser from remembering scroll position
+// if ("scrollRestoration" in history) {
+//   history.scrollRestoration = "manual";
+// }
+
 btnsOpenModal.forEach((btn) => btn.addEventListener("click", openModal));
 
 btnCloseModal.addEventListener("click", closeModal);
@@ -37,6 +42,7 @@ document.addEventListener("keydown", function (e) {
 
 //comment everything after this and uncomment concepts to get a know how of concepts and how everything interactacts with each other
 
+///////////////////////
 // Button Scrolling
 btnScrollTo.addEventListener("click", (e) => {
   const s1coords = section1.getBoundingClientRect();
@@ -100,6 +106,7 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
   }
 });
 
+///////////////////////
 //Tabbed Content
 tabsContainer.addEventListener("click", function (e) {
   const clicked = e.target.closest(".operations__tab");
@@ -147,7 +154,7 @@ const navHeight = nav.getBoundingClientRect().height;
 const headerObserver = new IntersectionObserver(
   (entries) => {
     const [entry] = entries;
-    console.log(entry);
+    // console.log(entry);
     if (!entry.isIntersecting) {
       nav.classList.add("sticky");
     } else {
@@ -163,12 +170,13 @@ const headerObserver = new IntersectionObserver(
 
 headerObserver.observe(header);
 
+///////////////////////
 // Reveal Section
 const allSections = document.querySelectorAll(".section");
 
 const revealSection = function (entries, observer) {
   const [entry] = entries;
-  console.log(entry);
+  // console.log(entry);
 
   if (!entry.isIntersecting) return;
 
@@ -183,8 +191,69 @@ const sectionObserver = new IntersectionObserver(revealSection, {
 
 allSections.forEach((section) => {
   sectionObserver.observe(section);
-  section.classList.add("section--hidden");
+  // section.classList.add("section--hidden");
 });
+
+///////////////////////
+// Lazy loading images
+const imgTargets = document.querySelectorAll("img[data-src]");
+// console.log(imgTargets);
+
+const loadImg = function (entries, Observer) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return;
+
+  // Replacing Src with data-src(Dataset)
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener("load", function () {
+    entry.target.classList.remove("lazy-img");
+  });
+
+  Observer.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: "200px",
+});
+
+imgTargets.forEach((img) => imgObserver.observe(img));
+
+///////////////////////
+// Slider
+
+const slides = document.querySelectorAll(".slide");
+const btnLeft = document.querySelector(".slider__btn--left");
+const btnRight = document.querySelector(".slider__btn--right");
+
+let curSlide = 0;
+const maxSlide = slides.length;
+
+const goToSlides = function (slide) {
+  slides.forEach(
+    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+  );
+};
+
+const nextSlide = function () {
+  if (curSlide === maxSlide - 1) curSlide = 0;
+  else curSlide++;
+
+  goToSlides(curSlide);
+};
+
+const prevSlide = function () {
+  if (curSlide === 0) curSlide = maxSlide - 1;
+  else curSlide--;
+
+  goToSlides(curSlide);
+};
+
+btnLeft.addEventListener("click", prevSlide);
+btnRight.addEventListener("click", nextSlide);
 
 // /////////////////////
 // //Concepts
