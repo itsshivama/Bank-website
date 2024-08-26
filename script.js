@@ -507,3 +507,22 @@ slider();
 
 // const observer = new IntersectionObserver(obsCallback, obsOptions);
 // observer.observe(section1);
+
+// ///////////////////////////////////////-
+// // Lifecycle DOM Events
+// // When the entire page HTML is loaded and DOM tree created domContentloaded is the event passed
+// document.addEventListener('DOMContentLoaded', function (e) {
+//   console.log('HTML parsed and DOM tree built!', e);
+// });
+
+//// When the page is fully loaded including scripts and lazy loaded stuff this even is passed
+// window.addEventListener('load', function (e) {
+//   console.log('Page fully loaded', e);
+// });
+
+//// Dont Abuse, this is to give warning to user when they are trying to exit the page
+// window.addEventListener('beforeunload', function (e) {
+//   e.preventDefault();
+//   console.log(e);
+//   e.returnValue = '';
+// });
